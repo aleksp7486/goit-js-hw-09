@@ -13,14 +13,14 @@ const changeBackgroundColor = () => {
 
 let isOn = null;
 
-let onStartId;
+let timerId;
 
 const onStart = () => {
   if (isOn) {
     return;
   }
   isOn = true;
-  onStartId = setInterval(() => {
+  timerId = setInterval(() => {
     changeBackgroundColor();
   }, 1000);
 };
@@ -31,8 +31,8 @@ const onStop = () => {
   if (!isOn) {
     return;
   }
-  isOn = false;
-  clearInterval(onStartId);
+  isOn = null;
+  clearInterval(timerId);
 };
 
 refs.btnStop.addEventListener('click', onStop);
