@@ -3,7 +3,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
 const refs = {
-  input: document.querySelector('input#datetime-picker'),
+  input: document.querySelector('#datetime-picker'),
   btnStart: document.querySelector('button[data-start]'),
   days: document.querySelector('span[data-days]'),
   hours: document.querySelector('span[data-hours]'),
@@ -11,48 +11,48 @@ const refs = {
   seconds: document.querySelector('span[data-seconds]'),
 };
 
-let selectedUnixDate;
-let countdownId = null;
-
-refs.btnStart.disabled = true;
-refs.btnStart.classList.add('btnStart-active');
-
-const options = {
+const flatpickrOptions = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    chooseDate(selectedDates);
+    const [date] = selectedDates;
+    chooseDate(date);
   },
 };
 
-flatpickr('input#datetime-picker', options);
+const calendar = flatpickr('input#datetime-picker', flatpickrOptions);
 
-refs.btnStart.addEventListener('click', countdownStart);
+refs.btnStart.disabled = true;
 
-function chooseDate(dates) {
-  if (dates[0].getTime() < Date.now()) {
+refs.btnStart.addEventListener('click', timerStart);
+
+function chooseDate(date) {
+  if (date.getTime() < Date.now()) {
     Notiflix.Notify.failure('Please choose a date in the future');
     return;
   }
-  selectedUnixDate = dates[0].getTime();
   refs.btnStart.disabled = false;
-  refs.btnStart.classList.remove('btnStart-active');
+  refs.btnStart.classList.add('btnStart-active');
   Notiflix.Notify.success('Date set');
 }
 
-function countdownStart(evt) {
+function timerStart(evt) {
   evt.preventDefault();
-  if (countdownId) {
+  if (refs.btnStart.disabled) {
     return;
   }
-  countdownId = setInterval(pushValue, 1000);
+  setInterval(pushValue, 1000);
   Notiflix.Notify.success('Timer activated');
-  refs.btnStart.classList.add('btnStart-active');
+  refs.btnStart.disabled = true;
+  refs.input.disabled = true;
+  refs.input.style.cursor = 'default';
+  refs.btnStart.classList.remove('btnStart-active');
 }
 
 function pushValue() {
+  const selectedUnixDate = calendar.selectedDates[0].getTime();
   const { days, hours, minutes, seconds } = convertMs(
     selectedUnixDate - Date.now()
   );

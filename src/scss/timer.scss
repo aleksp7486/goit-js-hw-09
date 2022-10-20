@@ -30,8 +30,10 @@ body {
   width: 100%;
 }
 .input {
+  margin-right: 10px;
   padding-left: 15px;
   border: 0;
+  border-radius: 4px;
   height: 1.875rem;
   font-family: $font-family;
 }
@@ -45,20 +47,17 @@ body {
   background-color: #333;
   font-family: $font-family;
   font-size: 1.2rem;
+  border-radius: 4px;
   transition: all 0.2s ease-in;
-  cursor: pointer;
-  &:hover {
-    font-size: 1.3rem;
-    background-color: rgb(69, 148, 83);
-  }
+  cursor: default;
 }
 
 .btnStart-active {
+  background-color: rgb(69, 148, 83);
   &:hover {
-    background-color: rgb(157, 55, 55);
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
-  cursor: default;
+  cursor: pointer;
 }
 
 .timer {
